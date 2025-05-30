@@ -1,14 +1,14 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 
-export default function ErrorMessage({ error }: { error: string }) {
+const ErrorMessage = ({ error }: { error: string }) => {
   return (
-    <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
+    <div className="mb-6 rounded-md border border-red-200 bg-red-50 p-4">
       <div className="flex">
-        <div className="flex-shrink-0 border-2 rounded-full w-6 h-6 flex items-center justify-center border-red-500">
+        <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border-2 border-red-500">
           <FontAwesomeIcon
             icon={faX}
-            className="text-red-500 text-sm text-bold"
+            className="text-bold text-sm text-red-500"
           />
         </div>
         <div className="ml-3">
@@ -17,4 +17,6 @@ export default function ErrorMessage({ error }: { error: string }) {
       </div>
     </div>
   );
-}
+};
+
+export default ErrorMessage;

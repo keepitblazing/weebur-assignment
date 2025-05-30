@@ -6,8 +6,7 @@ interface UseProductsOptions {
   limit?: number;
 }
 
-export const useProducts = (options: UseProductsOptions = {}) => {
-  const { limit = 20 } = options;
+export const useProducts = ({ limit }: UseProductsOptions = {}) => {
   const queryClient = useQueryClient();
 
   const query = useQuery<{ products: Product[] }, Error>({
@@ -16,7 +15,7 @@ export const useProducts = (options: UseProductsOptions = {}) => {
     staleTime: 5 * 60 * 1000,
   });
 
-  const createMutation = useMutation({
+  const createProductMutation = useMutation({
     mutationFn: (data: AddProductRequestBody) => createProduct(data),
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -27,6 +26,6 @@ export const useProducts = (options: UseProductsOptions = {}) => {
 
   return {
     ...query,
-    createProduct: createMutation,
+    createProduct: createProductMutation,
   };
 };
