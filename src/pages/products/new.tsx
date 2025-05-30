@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { AddProductRequestBody } from "@/types/product";
-import { createProduct } from "@/libs/apis/product";
+import { useProducts } from "@/hooks/useProducts";
 import ProductForm from "@/components/product/ProductForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faCheck } from "@fortawesome/free-solid-svg-icons";
@@ -10,30 +10,20 @@ import ErrorMessage from "@/components/common/ErrorMessage";
 
 export default function NewProductPage() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+
+  const { createProduct } = useProducts();
 
   const handleGoBack = () => {
     router.push("/products");
   };
 
   const handleSubmit = async (data: AddProductRequestBody) => {
-    try {
-      setLoading(true);
-      setError(null);
-      await createProduct(data);
-      setSuccess(true);
-      setTimeout(() => {
-        router.push("/products");
-      }, 1000);
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "상품 생성에 실패했습니다."
-      );
-    } finally {
-      setLoading(false);
-    }
+    await createProduct.mutateAsync(data);
+    setSuccess(true);
+    setTimeout(() => {
+      router.push("/products");
+    }, 1000);
   };
 
   if (success) {
@@ -97,11 +87,19 @@ export default function NewProductPage() {
           </div>
 
           {/* 에러 메시지 */}
-          {error && <ErrorMessage error={error} />}
+          {createProduct.error && (
+            <ErrorMessage
+              error={createProduct.error.message || "상품 생성에 실패했습니다."}
+            />
+          )}
+
           {/* 폼 영역 */}
           <div className="bg-white shadow rounded-lg">
             <div className="px-6 py-8">
-              <ProductForm onSubmit={handleSubmit} loading={loading} />
+              <ProductForm
+                onSubmit={handleSubmit}
+                loading={createProduct.isPending}
+              />
             </div>
           </div>
         </div>

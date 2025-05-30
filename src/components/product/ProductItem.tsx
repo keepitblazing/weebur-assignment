@@ -10,7 +10,6 @@ interface ProductItemProps {
 
 export default function ProductItem({ product, viewMode }: ProductItemProps) {
   const { title, description, thumbnail, rating, reviews } = product;
-  console.log(product);
 
   const renderStars = (rating: number) => {
     const stars = [];
