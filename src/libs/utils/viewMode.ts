@@ -3,9 +3,17 @@ import { ViewMode } from "@/types/product";
 
 const VIEW_MODE_STORAGE_KEY = "product_view_mode";
 const VIEW_MODE_TIMESTAMP_KEY = "product_view_mode_timestamp";
+const EXPIRATION_SECONDS = 24 * 60 * 60;
 
-export function getStoredViewMode(): ViewMode | null {
-  if (typeof window === "undefined") return null;
+const isClient = typeof window !== "undefined";
+
+const clearStoredViewMode = () => {
+  localStorage.removeItem(VIEW_MODE_STORAGE_KEY);
+  localStorage.removeItem(VIEW_MODE_TIMESTAMP_KEY);
+};
+
+export const getStoredViewMode = (): ViewMode | null => {
+  if (!isClient) return null;
 
   const stored = localStorage.getItem(VIEW_MODE_STORAGE_KEY);
   const timestamp = localStorage.getItem(VIEW_MODE_TIMESTAMP_KEY);
@@ -14,36 +22,30 @@ export function getStoredViewMode(): ViewMode | null {
 
   const now = dayjs().unix();
   const storedTime = parseInt(timestamp, 10);
-  const twentyFourHours = 24 * 60 * 60;
 
-  if (now - storedTime > twentyFourHours) {
-    localStorage.removeItem(VIEW_MODE_STORAGE_KEY);
-    localStorage.removeItem(VIEW_MODE_TIMESTAMP_KEY);
+  if (now - storedTime > EXPIRATION_SECONDS) {
+    clearStoredViewMode();
     return null;
   }
 
   return stored as ViewMode;
-}
+};
 
-export function generateRandomViewMode(): ViewMode {
-  return Math.random() < 0.5 ? "list" : "grid";
-}
+export const generateRandomViewMode = (): ViewMode =>
+  Math.random() < 0.5 ? ViewMode.LIST : ViewMode.GRID;
 
-export function storeViewMode(viewMode: ViewMode): void {
-  if (typeof window === "undefined") return;
+export const storeViewMode = (viewMode: ViewMode): void => {
+  if (!isClient) return;
 
   localStorage.setItem(VIEW_MODE_STORAGE_KEY, viewMode);
   localStorage.setItem(VIEW_MODE_TIMESTAMP_KEY, dayjs().unix().toString());
-}
+};
 
-export function getOrGenerateViewMode(): ViewMode {
+export const getViewMode = (): ViewMode => {
   const stored = getStoredViewMode();
-
-  if (stored) {
-    return stored;
-  }
+  if (stored) return stored;
 
   const newViewMode = generateRandomViewMode();
   storeViewMode(newViewMode);
   return newViewMode;
-}
+};

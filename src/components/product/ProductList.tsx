@@ -8,18 +8,18 @@ interface ProductListProps {
   loading?: boolean;
 }
 
-export default function ProductList({
+const ProductList = ({
   products,
   viewMode,
   loading = false,
-}: ProductListProps) {
+}: ProductListProps) => {
   if (loading) {
     return <Spinner message="상품을 불러오는 중..." />;
   }
 
   if (products.length === 0) {
     return (
-      <div className="text-center py-12">
+      <div className="py-12 text-center">
         <p className="text-gray-500">등록된 상품이 없습니다.</p>
       </div>
     );
@@ -28,9 +28,9 @@ export default function ProductList({
   return (
     <div
       className={`${
-        viewMode === "grid"
-          ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-          : "space-y-4"
+        viewMode === ViewMode.LIST
+          ? "space-y-4"
+          : "grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
       }`}
     >
       {products.map((product) => (
@@ -38,4 +38,6 @@ export default function ProductList({
       ))}
     </div>
   );
-}
+};
+
+export default ProductList;

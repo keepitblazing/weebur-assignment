@@ -34,13 +34,16 @@ export interface ProductsParams {
   select?: string;
 }
 
-export type ViewMode = "list" | "grid";
+export enum ViewMode {
+  LIST = "list",
+  GRID = "grid",
+}
 
 export type BrandType = "Apple" | "Samsung" | "Weebur";
 
 export interface AddProductRequestBody {
   title: string;
-  description: string;
+  description?: string;
   price: number;
   discountPercentage?: number;
   brand: BrandType;
