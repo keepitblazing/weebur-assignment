@@ -13,6 +13,7 @@ export const useProducts = ({ limit }: UseProductsOptions = {}) => {
     queryKey: ["products", { limit }],
     queryFn: () => fetchProducts({ limit }),
     staleTime: 5 * 60 * 1000,
+    enabled: limit !== undefined,
   });
 
   const createProductMutation = useMutation({
