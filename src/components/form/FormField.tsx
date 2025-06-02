@@ -14,11 +14,12 @@ interface BaseFieldProps {
 
 interface InputFieldProps
   extends BaseFieldProps,
-    InputHTMLAttributes<HTMLInputElement> {
+    Omit<InputHTMLAttributes<HTMLInputElement>, "defaultValue"> {
   type?: "text" | "number" | "email" | "password";
   suffix?: string | ReactNode;
   maxLength?: number;
   showCharacterCount?: boolean;
+  defaultValue?: string | number;
 }
 
 interface TextareaFieldProps
@@ -41,11 +42,14 @@ export const InputField = ({
   suffix,
   maxLength,
   value,
+  defaultValue,
   ...props
 }: InputFieldProps) => {
   const inputClasses = `w-full px-3 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
     error && "border-red-300 focus:border-red-500 focus:ring-red-500"
   } ${suffix ? "pr-8" : ""} ${className}`;
+
+  const isControlled = value !== undefined;
 
   return (
     <div>
@@ -57,8 +61,8 @@ export const InputField = ({
         <input
           type={type}
           className={inputClasses}
-          value={value}
           maxLength={maxLength}
+          {...(isControlled ? { value } : { defaultValue })}
           {...props}
         />
         {suffix && (

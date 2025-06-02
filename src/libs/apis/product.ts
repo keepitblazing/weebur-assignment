@@ -1,43 +1,9 @@
-import axios, { AxiosError } from "axios";
+import { instance, handleApiError } from "./axios";
 import {
   ProductsResponse,
   ProductsParams,
   AddProductRequestBody,
 } from "@/types/product";
-interface ApiError {
-  message: string;
-  status?: number;
-}
-
-const instance = axios.create({
-  baseURL: "https://dummyjson.com",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  timeout: 10000,
-});
-
-const handleApiError = (error: unknown, defaultMessage: string): ApiError => {
-  if (axios.isAxiosError(error)) {
-    const axiosError = error as AxiosError;
-    return {
-      message: `${defaultMessage}: ${
-        axiosError.response?.status || axiosError.message
-      }`,
-      status: axiosError.response?.status,
-    };
-  }
-
-  if (error instanceof Error) {
-    return {
-      message: `${defaultMessage}: ${error.message}`,
-    };
-  }
-
-  return {
-    message: defaultMessage,
-  };
-};
 
 export const fetchProducts = async (
   params: ProductsParams = {},
