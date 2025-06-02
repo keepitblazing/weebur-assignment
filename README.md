@@ -19,42 +19,46 @@ Next.js와 TypeScript로 구현한 상품 관리 시스템입니다. 사용자�
 
 ## 실행 방법
 
-\`\`\`bash
-
+```bash
 # 의존성 설치
-
 npm install
-
 # 또는
-
 yarn install
 
 # 개발 서버 실행
-
 npm run dev
-
 # 또는
-
 yarn dev
 
 # 빌드
-
 npm run build
-
 # 또는
-
 yarn build
 
 # 프로덕션 서버 실행
-
 npm run start
-
 # 또는
-
 yarn start
-\`\`\`
+```
 
 개발 서버는 [http://localhost:3000](http://localhost:3000)에서 확인할 수 있습니다.
+
+---
+
+## 개발 계획
+
+### 1단계: 핵심 기능부터 우선 구현 ✅
+
+- 상품 목록 조회 기능
+- 상품 등록 폼 구현
+- 실시간 유효성 검사
+
+### 2단계: 리팩토링 🔄
+
+- 컴포넌트 재사용성 향상
+- 커스텀 훅으로 로직 재사용성 향상
+- 코드 중복 제거 및 최적화
+- 에러 처리 개선
 
 ---
 
@@ -71,7 +75,7 @@ yarn start
 
 ### 2. 일관된 컴포넌트 시스템
 
-\`\`\`
+```
 src/
 ├── components/
 │ ├── common/ # 버튼, 입력 필드 등 기본 UI
@@ -81,7 +85,7 @@ src/
 ├── libs/ # API 호출, 유틸리티
 ├── pages/ # Next.js 페이지
 └── types/ # 타입 정의
-\`\`\`
+```
 
 InputField, TextareaField, SelectField 컴포넌트를 만들어, 어떤 입력 필드든 똑같은 방식으로 쓸 수 있게 했습니다.
 
